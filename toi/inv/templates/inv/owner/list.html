@@ -1,0 +1,20 @@
+{% extends "inv/owner/base.html" %}
+{% block content %}
+<div class="head"><h1>Чакыруулар</h1><a class="btn btn-p" href="{% url 'owner_new' %}">＋ Жаңы чакыруу</a></div>
+{% if invs %}<div class="grid">
+{% for i in invs %}
+<div class="card">
+  <div class="ph"{% if i.cover_photo %} style="background-image:url('{{ i.cover_photo.url }}')"{% endif %}><span>{{ i.title }}</span></div>
+  <div class="bd">
+    <div class="meta">{{ i.event_title }} · {{ i.local|date:"d.m.Y H:i" }}<br>{{ i.venue_name }}</div>
+    <div class="stat"><span class="pill g">Келет: {{ i.coming_total }} киши</span><span class="pill">Жооп: {{ i.rsvps.all|length }}</span>{% if not i.is_active %}<span class="pill off">Жашырылган</span>{% endif %}</div>
+    <div class="acts">
+      <a class="btn btn-g btn-s" href="{% url 'invitation' i.slug %}" target="_blank">Көрүү ↗</a>
+      <a class="btn btn-g btn-s" href="{% url 'owner_edit' i.pk %}">Өзгөртүү</a>
+      <a class="btn btn-g btn-s" href="{% url 'guests' i.slug i.token %}" target="_blank">Коноктор</a>
+    </div>
+  </div>
+</div>
+{% endfor %}</div>
+{% else %}<div class="empty">Азырынча чакыруу жок. «Жаңы чакыруу» баскычын басыңыз.</div>{% endif %}
+{% endblock %}

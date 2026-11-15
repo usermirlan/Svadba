@@ -1,0 +1,40 @@
+{% extends "inv/owner/base.html" %}
+{% block title %}{% if inv %}{{ inv.title }}{% else %}Жаңы чакыруу{% endif %}{% endblock %}
+{% block content %}
+<div class="head"><div><h1>{% if inv %}{{ inv.title }}{% else %}Жаңы чакыруу{% endif %}</h1><a class="meta" href="{% url 'owner_list' %}">← Бардык чакыруулар</a></div></div>
+{% if inv %}
+<div class="links" style="margin-bottom:16px">
+  <div class="row"><b>Конокторго жибере турган шилтеме</b><div class="copy"><input readonly value="{{ request.scheme }}://{{ request.get_host }}{% url 'invitation' inv.slug %}"><button class="btn btn-p btn-s" type="button" data-copy>Көчүрүү</button></div></div>
+  <div class="row"><b>Той ээсине: келе тургандардын тизмеси (жашыруун шилтеме)</b><div class="copy"><input readonly value="{{ request.scheme }}://{{ request.get_host }}{% url 'guests' inv.slug inv.token %}"><button class="btn btn-p btn-s" type="button" data-copy>Көчүрүү</button></div></div>
+</div>
+{% endif %}
+{% if inv and inv.photos.exists %}
+<div class="fs" style="margin-bottom:16px"><h3>Жүктөлгөн сүрөттөр</h3><div class="thumbs" style="margin:0">
+  {% for ph in inv.photos.all %}<div class="t"><img src="{{ ph.image.url }}" alt=""><form method="post" action="{% url 'owner_photo_delete' ph.pk %}">{% csrf_token %}<button type="submit" title="Өчүрүү">✕</button></form></div>{% endfor %}
+</div></div>
+{% endif %}
+<form class="form" method="post" enctype="multipart/form-data">{% csrf_token %}
+  {% if form.non_field_errors %}<div class="msg error">{{ form.non_field_errors }}</div>{% endif %}
+  <div class="fs"><h3>Ким жана качан</h3><div class="g2">
+    {% include "inv/owner/_f.html" with f=form.name1 %}{% include "inv/owner/_f.html" with f=form.name2 %}
+    {% include "inv/owner/_f.html" with f=form.event_title %}{% include "inv/owner/_f.html" with f=form.tagline %}
+    {% include "inv/owner/_f.html" with f=form.date %}{% include "inv/owner/_f.html" with f=form.hosts %}
+  </div></div>
+  <div class="fs"><h3>Сүрөттөр жана музыка</h3><div class="g2">
+    {% include "inv/owner/_f.html" with f=form.cover_photo %}
+    {% include "inv/owner/_f.html" with f=form.music %}
+  </div>
+  <div class="fld" style="margin-top:14px"><label for="photos">Эки жаштын сүрөттөрү (бир нечесин тандаса болот, эң көп 12)</label><input id="photos" type="file" name="photos" accept="image/*" multiple></div></div>
+  <div class="fs"><h3>Текст жана программа</h3><div style="display:grid;gap:14px">
+    {% include "inv/owner/_f.html" with f=form.text %}{% include "inv/owner/_f.html" with f=form.program %}
+  </div></div>
+  <div class="fs"><h3>Той өтө турган жер</h3><div class="g2">
+    {% include "inv/owner/_f.html" with f=form.venue_name %}{% include "inv/owner/_f.html" with f=form.venue_address %}
+    {% include "inv/owner/_f.html" with f=form.map_url %}
+  </div></div>
+  <div class="fs"><label style="display:flex;gap:10px;align-items:center;font-weight:600">{{ form.show_rsvp }} «Келесизби?» формасын көрсөтүү</label>
+  <label style="display:flex;gap:10px;align-items:center;font-weight:600;margin-top:12px">{{ form.is_active }} Жарыяланган (конокторго ачык)</label></div>
+  <div class="sticky"><button class="btn btn-p" type="submit">Сактоо</button>{% if inv %}<a class="btn btn-g" href="{% url 'invitation' inv.slug %}" target="_blank">Көрүү ↗</a>{% endif %}</div>
+</form>
+{% if inv %}<form method="post" action="{% url 'owner_delete' inv.pk %}" data-confirm="Бул чакыруу жана анын бардык файлдары биротоло өчүрүлөт. Улантасызбы?" style="margin-top:26px">{% csrf_token %}<button class="btn btn-r btn-s" type="submit">Чакырууну өчүрүү</button></form>{% endif %}
+{% endblock %}

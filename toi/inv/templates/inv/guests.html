@@ -1,0 +1,10 @@
+{% load static %}<!DOCTYPE html>
+<html lang="ky"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex"><title>Коноктор — {{ inv.title }}</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'inv/owner.css' %}"></head><body>
+<div class="top"><div class="w"><span class="brand">{{ inv.title }}</span><a class="l" href="{% url 'invitation' inv.slug %}">Чакыруу ↗</a></div></div>
+<div class="wrap"><h1>Коноктордун жооптору</h1><p class="meta">{{ inv.event_title }} · {{ inv.local|date:"d.m.Y H:i" }} · {{ inv.venue_name }}</p>
+<div class="sum"><div><b>{{ inv.coming_total }}</b><small>киши келет</small></div><div><b>{{ yes }}</b><small>«Келем» деген жооп</small></div><div><b>{{ no }}</b><small>«Келе албайм»</small></div></div>
+{% if rsvps %}<table><tr><th>Аты-жөнү</th><th>Жообу</th><th>Киши</th><th>Качан</th></tr>
+{% for r in rsvps %}<tr><td>{{ r.name }}</td><td>{% if r.coming %}<span class="pill g">Келет</span>{% else %}<span class="pill off">Келе албайт</span>{% endif %}</td><td>{% if r.coming %}{{ r.count }}{% else %}—{% endif %}</td><td class="meta">{{ r.created|date:"d.m H:i" }}</td></tr>{% endfor %}
+</table>{% else %}<div class="empty">Азырынча эч ким жооп бере элек.</div>{% endif %}</div></body></html>

@@ -1,0 +1,14 @@
+{% load static %}<!DOCTYPE html>
+<html lang="ky"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex">
+<title>{% block title %}Чакыруулар{% endblock %}</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'inv/owner.css' %}"></head><body>
+<div class="top"><div class="w"><a class="brand" href="{% url 'owner_list' %}">Той чакыруулары</a>
+<form method="post" action="{% url 'owner_logout' %}">{% csrf_token %}<button type="submit">Чыгуу</button></form></div></div>
+<div class="wrap">
+{% if messages %}<div class="msgs">{% for m in messages %}<div class="msg {{ m.tags }}">{{ m }}</div>{% endfor %}</div>{% endif %}
+{% block content %}{% endblock %}
+</div>
+<script>document.addEventListener("click",e=>{const b=e.target.closest("[data-copy]");if(!b)return;const i=b.previousElementSibling;i.select();try{navigator.clipboard.writeText(i.value).then(()=>{b.textContent="Көчүрүлдү ✓";setTimeout(()=>b.textContent="Көчүрүү",1500)},()=>{})}catch(x){}});
+document.addEventListener("submit",e=>{const m=e.target.dataset.confirm;if(m&&!window.confirm(m))e.preventDefault()});</script>
+</body></html>
