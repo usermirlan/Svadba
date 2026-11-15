@@ -27,3 +27,17 @@ python manage.py runserver
 - Музыка: кардар берген же эркин лицензиядагы ырды гана жүктөңүз. Файл 20 МБдан, сүрөт 10 МБдан ашпашы керек.
 - Телефондор музыканы «мөөрдү» баскандан кийин гана ойнотот.
 - Серверге коюуда `DJANGO_SECRET_KEY`, `DJANGO_DEBUG=0`, `DJANGO_ALLOWED_HOSTS=<домен>` чөйрө өзгөрмөлөрүн коюңуз жана `/media/` менен `/static/` папкаларын веб-серверден таратыңыз (PythonAnywhere: Web → Static files).
+
+## Render'ге коюу
+
+Керектүү 2 акысыз кызмат:
+1. **Neon** (neon.tech) — PostgreSQL. Долбоор ачып, `postgresql://...` шилтемесин көчүрүңүз.
+2. **Cloudinary** (cloudinary.com) — сүрөт жана музыка. Dashboard'дон `CLOUDINARY_URL` (`cloudinary://...`) көчүрүңүз.
+
+Render'де: **New → Blueprint** → GitHub репону тандаңыз (`render.yaml` өзү окулат).
+Сурала турган маанилер:
+- `DATABASE_URL` — Neon шилтемеси
+- `CLOUDINARY_URL` — Cloudinary шилтемеси
+- `ADMIN_USERNAME`, `ADMIN_PASSWORD` — ээсинин логини/паролу (күчтүү пароль коюңуз)
+
+Deploy бүткөндө: `https://<аты>.onrender.com/owner/` → ошол логин менен кириңиз.

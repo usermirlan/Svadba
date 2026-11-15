@@ -21,7 +21,8 @@ def invitation(request, slug):
     inv = get_object_or_404(Invitation, slug=slug)
     if not inv.is_active and not request.user.is_staff:
         raise Http404
-    return render(request, "inv/invite.html", {"inv": inv, "ts": int(inv.date.timestamp() * 1000)})
+    og_image = request.build_absolute_uri(inv.cover_photo.url) if inv.cover_photo else ""
+    return render(request, "inv/invite.html", {"inv": inv, "ts": int(inv.date.timestamp() * 1000), "og_image": og_image})
 
 
 @require_POST

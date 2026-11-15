@@ -25,6 +25,16 @@ def validate_audio(f):
         raise ValidationError("Музыка файлы 20 МБдан чоң болбошу керек")
 
 
+def audio_storage():
+    """Cloudinary'де аудио «video» түрүндө сакталат, ошондуктан өзүнчө storage."""
+    from django.conf import settings
+    from django.core.files.storage import default_storage
+    if getattr(settings, "USE_CLOUDINARY", False):
+        from cloudinary_storage.storage import VideoMediaCloudinaryStorage
+        return VideoMediaCloudinaryStorage()
+    return default_storage
+
+
 def validate_image_size(f):
     if f.size > 10 * 1024 * 1024:
         raise ValidationError("Сүрөт 10 МБдан чоң болбошу керек")
@@ -53,7 +63,7 @@ class Invitation(models.Model):
 
     cover_photo = models.ImageField("Башкы сүрөт (фонго)", upload_to="covers/", blank=True, validators=[validate_image_size],
                                     help_text="Тик (вертикалдуу) сүрөт жакшы көрүнөт")
-    music = models.FileField("Музыка", upload_to="music/", blank=True, validators=[validate_audio],
+    music = models.FileField("Музыка", upload_to="music/", blank=True, validators=[validate_audio], storage=audio_storage,
                              help_text="mp3 файл. Бош калса, жөнөкөй обон ойнойт")
 
     class Meta:
